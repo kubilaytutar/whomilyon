@@ -290,7 +290,7 @@ const GameScreen: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-4">
         {/* Konfeti Efekti */}
-        {showConfetti && (
+        {showConfetti && typeof window !== 'undefined' && (
           <Confetti
             width={window.innerWidth}
             height={window.innerHeight}
@@ -469,7 +469,7 @@ const GameScreen: React.FC = () => {
   return (
     <div className="desktop-game-screen min-h-screen bg-black text-white p-6 font-sans flex flex-col relative">
       {/* Konfeti Efekti */}
-      {showConfetti && (
+      {showConfetti && typeof window !== 'undefined' && (
         <Confetti
           width={window.innerWidth}
           height={window.innerHeight}

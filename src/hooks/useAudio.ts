@@ -20,6 +20,9 @@ export interface AudioManager {
 // Basit audio çalma fonksiyonu
 const playAudio = (src: string, volume: number = 0.5, loop: boolean = false): HTMLAudioElement | null => {
   try {
+    if (typeof window === 'undefined' || typeof Audio === 'undefined') {
+      return null;
+    }
     const audio = new Audio(src);
     audio.volume = volume;
     audio.loop = loop;
@@ -39,6 +42,10 @@ const playAudioWithCallback = (
   callbacks?: { onPlay?: () => void; onEnded?: () => void }
 ): HTMLAudioElement | null => {
   try {
+    if (typeof window === 'undefined' || typeof Audio === 'undefined') {
+      if (callbacks?.onEnded) setTimeout(callbacks.onEnded, 1000); // Fallback timing
+      return null;
+    }
     const audio = new Audio(src);
     audio.volume = volume;
     audio.loop = loop;
@@ -79,7 +86,9 @@ export const useAudio = (): AudioManager => {
   const toggleMute = useCallback(() => {
     setIsMuted(prev => {
       const newMuted = !prev;
-      localStorage.setItem('gameAudioMuted', newMuted.toString());
+      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        localStorage.setItem('gameAudioMuted', newMuted.toString());
+      }
       
       if (newMuted) {
         // Tüm sesleri durdur
