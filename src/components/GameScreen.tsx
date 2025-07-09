@@ -5,11 +5,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { useGameMode } from '@/context/GameModeContext';
 import { useAudio } from '@/hooks/useAudio';
 import { QUESTIONS, Question } from '@/data/questions';
-import PrizeLadder from '@/components/PrizeLadder';
 import CompactPrizeLadder from '@/components/CompactPrizeLadder';
 import GameEndDialog from '@/components/GameEndDialog';
 import Confetti from 'react-confetti';
-import { ArrowLeft, Phone, Users, Percent, RotateCcw, Volume2, VolumeX, DollarSign } from 'lucide-react';
+import { ArrowLeft, Phone, Users, Percent, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import HorizontalPrizeLadder from './HorizontalPrizeLadder';
 
 interface LifelineUsage {
@@ -33,7 +32,6 @@ const GameScreen: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
   const [gameWon, setGameWon] = useState(false);
@@ -106,7 +104,6 @@ const GameScreen: React.FC = () => {
     // 7 saniye bekle sonra sonucu göster
     setTimeout(() => {
       const correct = answer === currentQuestion.correctAnswer;
-      setIsCorrect(correct);
       setShowResult(true);
       setIsWaiting(false);
       
@@ -161,7 +158,6 @@ const GameScreen: React.FC = () => {
     setCurrentQuestionIndex(0);
     setSelectedAnswer(null);
     setShowResult(false);
-    setIsCorrect(false);
     setIsWaiting(false);
     setGameEnded(false);
     setGameWon(false);
@@ -185,21 +181,7 @@ const GameScreen: React.FC = () => {
     setMode(null);
   };
 
-  const handleWithdraw = () => {
-    // Oyundan çekilme mantığı
-    const lastWinnings = currentQuestionIndex > 0 ? PRIZE_AMOUNTS[currentQuestionIndex - 1] : 0;
-    setCurrentWinnings(lastWinnings);
-    if (lastWinnings > 0) {
-      setShowWinnings(true);
-    }
-    
-    // Animasyonun bitmesi için kısa bir bekleme
-    setTimeout(() => {
-      setShowWinnings(false);
-      setGameEnded(true);
-      setGameWon(false); // Oyunu kazanmadı, sadece çekildi
-    }, 2500);
-  };
+
 
   const handleFiftyFifty = () => {
     if (lifelinesUsed.fiftyFifty || isWaiting || showResult || gameEnded) return;
@@ -377,7 +359,7 @@ const GameScreen: React.FC = () => {
 
         {/* Answer Options */}
         <div className="space-y-3 mb-6">
-          {visibleOptions.map((option, index) => (
+          {visibleOptions.map((option) => (
             <Button
               key={option}
               variant={getButtonVariant(option)}

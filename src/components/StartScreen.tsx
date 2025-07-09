@@ -2,12 +2,10 @@ import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useGameMode } from '@/context/GameModeContext';
-import { useAudio } from '@/hooks/useAudio';
 import { Monitor, Smartphone } from 'lucide-react';
 
 const StartScreen: React.FC = () => {
   const { setMode } = useGameMode();
-  const audio = useAudio();
 
   // Bu ekranda müzik çalma
   useEffect(() => {
